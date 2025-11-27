@@ -1,0 +1,17 @@
+title: "Secret Society 133Clan"
+description: "Ruang senyap untuk pemikir dan eksplorator dalam lingkaran 133."
+theme: minima
+markdown: kramdown
+show_excerpts: true
+
+author:
+  name: "133 Council"
+  email: "secret@133clan.org"
+
+collections:
+  posts:
+    output: true
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
