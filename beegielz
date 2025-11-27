@@ -1,0 +1,346 @@
+# Creating upgraded 133Clan ZIP package now.
+import os, zipfile, textwrap, shutil
+base = "/mnt/data/133clan_github_template_upgraded"
+# Clean up if exists
+if os.path.exists(base):
+    shutil.rmtree(base)
+os.makedirs(base, exist_ok=True)
+
+def write(path, content):
+    full = os.path.join(base, path)
+    os.makedirs(os.path.dirname(full), exist_ok=True)
+    with open(full, "w", encoding="utf-8") as f:
+        f.write(content)
+
+# Core files
+write("_config.yml", textwrap.dedent("""\
+title: "Secret Society 133Clan"
+description: "Ruang senyap untuk pemikir dan eksplorator dalam lingkaran 133."
+baseurl: ""
+url: "https://133clan.github.io"
+
+theme: minima
+markdown: kramdown
+show_excerpts: true
+
+author:
+  name: "133 Council"
+  email: "secret@133clan.org"
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+include:
+  - assets
+
+nav:
+  - title: "Home"
+    url: "/"
+  - title: "Manifesto"
+    url: "/manifesto/"
+  - title: "Arsip"
+    url: "/archives/"
+  - title: "Tentang"
+    url: "/about/"
+
+display_toc: false
+"""))
+
+write("index.md", textwrap.dedent("""\
+---
+layout: home
+title: "133Clan"
+---
+
+Selamat datang di lingkaran.
+
+Situs ini memuat manifesto, arsip, dan pemikiran dari Secret Society 133Clan.
+
+Lihat tulisan terbaru di bagian Arsip.
+"""))
+
+write("README.md", textwrap.dedent("""\
+# 133clan.github.io (Upgraded appearance)
+
+Versi ini memperbarui tampilan menjadi tema gelap hitam-emas, menambahkan:
+- header dengan logo (assets/images/logo.svg)
+- footer sigil (assets/images/sigil.svg)
+- file layout custom untuk header/footer integrasi
+- CSS khusus (assets/css/style.css)
+- animasi ringan JS (assets/js/anim.js)
+
+Cara pakai: extract ZIP lalu upload isi ke repository `USERNAME/USERNAME.github.io` atau push via git.
+"""))
+
+write(".gitignore", textwrap.dedent("""\
+.DS_Store
+*.pyc
+node_modules/
+.sass-cache/
+_site/
+.idea/
+.vscode/
+"""))
+
+# Pages
+write("about/index.md", textwrap.dedent("""\
+---
+layout: page
+title: "Tentang 133Clan"
+permalink: /about/
+---
+
+133Clan adalah komunitas eksklusif untuk pemikir, penjelajah, dan penjaga simbol.
+"""))
+
+write("manifesto/index.md", textwrap.dedent("""\
+---
+layout: page
+title: "Manifesto"
+permalink: /manifesto/
+---
+
+### Manifesto 133
+
+Kami menghargai ketenangan, kajian mendalam, dan kehati-hatian.
+"""))
+
+write("_posts/2025-01-01-salam-pembuka.md", textwrap.dedent("""\
+---
+layout: post
+title: "Salam Pembuka"
+date: 2025-01-01 09:00:00 +0700
+categories: [pengumuman]
+---
+
+Selamat datang di ruang senyap 133Clan.
+"""))
+
+# Assets: CSS with upgraded styles (dark + gold accents) and typography rules
+write("assets/css/style.css", textwrap.dedent("""\
+/* 133Clan — Dark Gold Theme */
+/* Do not hard-code font imports here; use the theme or include via head if needed. */
+
+:root{
+  --bg: #05060a;
+  --panel: #0b1220;
+  --muted: #6b6b6b;
+  --accent: #c99a3b;
+  --accent-2: #d4ad3d;
+  --light: #f6f2e9;
+  --glass: rgba(255,255,255,0.04);
+  --radius: 12px;
+}
+
+html,body{
+  height:100%;
+  margin:0;
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(201,154,59,0.04), transparent),
+              radial-gradient(900px 400px at 90% 80%, rgba(110,168,255,0.02), transparent),
+              var(--bg);
+  color:var(--light);
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.6;
+  transition: background 0.25s ease;
+}
+
+/* Header */
+.site-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:28px 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+  position:sticky;
+  top:0;
+  z-index:30;
+  backdrop-filter: blur(6px);
+}
+
+.brand-left{ display:flex; align-items:center; gap:14px; }
+.site-logo{ width:68px; height:auto; display:block; filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6)); }
+.site-title{ font-family: 'Playfair Display', serif; font-size:1.4rem; letter-spacing:1px; color:var(--light); margin:0; }
+.site-tag{ font-size:0.78rem; color:var(--muted); margin-top:3px; }
+
+.nav-links{ display:flex; gap:10px; align-items:center; }
+.nav-links a{ color:var(--light); opacity:0.86; padding:8px 12px; border-radius:8px; font-size:0.95rem; text-decoration:none; }
+.nav-links a:hover{ background:var(--glass); color:var(--accent); transform:translateY(-2px); transition:all .18s ease; }
+
+.container{ max-width:980px; margin: 26px auto; padding: 0 18px; }
+
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  border:1px solid rgba(255,255,255,0.03);
+  padding:18px;
+  border-radius:var(--radius);
+  box-shadow: 0 6px 22px rgba(2,6,23,0.6);
+}
+
+/* Post title */
+.post-title{ font-family: 'Playfair Display', serif; font-size:2rem; margin:6px 0 8px 0; color:var(--light); }
+.post-meta{ color:var(--muted); font-size:0.92rem; margin-bottom:12px; }
+
+a{ color:var(--accent); }
+a:hover{ color:var(--accent-2); text-decoration:underline; }
+
+footer.site-footer{
+  margin-top:48px;
+  padding:32px 18px;
+  text-align:center;
+  color:var(--muted);
+  border-top:1px solid rgba(255,255,255,0.03);
+}
+
+/* Sigil */
+.footer-sigil{ width:90px; height:auto; margin:8px auto 12px auto; opacity:0.92; }
+
+/* Small devices responsiveness */
+@media (max-width:640px){
+  .site-title{ font-size:1.1rem }
+  .nav-links{ display:none }
+  .site-logo{ width:56px }
+}
+"""))
+
+# Assets: JS animation (light pulsing glyph)
+write("assets/js/anim.js", textwrap.dedent("""\
+/* Small JS to add a subtle pulsing on elements with data-pulse attribute */
+document.addEventListener('DOMContentLoaded', function(){
+  const els = document.querySelectorAll('[data-pulse]');
+  els.forEach(el=>{
+    el.style.transition = 'transform 0.9s ease-in-out, opacity 0.9s ease-in-out';
+    let up = true;
+    setInterval(()=>{
+      if(up){
+        el.style.transform = 'scale(1.03)';
+        el.style.opacity = '0.98';
+      } else {
+        el.style.transform = 'scale(1)';
+        el.style.opacity = '1';
+      }
+      up = !up;
+    }, 2200);
+  });
+});
+"""))
+
+# Layouts: default.html to include header/footer and assets (minimal Jekyll layout)
+write("_layouts/default.html", textwrap.dedent("""\
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ page.title }} - {{ site.title }}</title>
+    <meta name="description" content="{{ page.excerpt | default: site.description }}">
+    <!-- Basic CSS link -->
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <script defer src="{{ '/assets/js/anim.js' | relative_url }}"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand-left container" style="display:flex;align-items:center;gap:16px;">
+        <a href="{{ '/' | relative_url }}" aria-label="133Clan">
+          <img src="{{ '/assets/images/logo.svg' | relative_url }}" alt="133Clan Logo" class="site-logo" data-pulse>
+        </a>
+        <div style="display:flex;flex-direction:column;">
+          <h1 class="site-title">{{ site.title }}</h1>
+          <div class="site-tag">{{ site.description }}</div>
+        </div>
+      </div>
+      <nav class="nav-links container" aria-label="Main navigation">
+        <a href="{{ '/' | relative_url }}">Home</a>
+        <a href="{{ '/manifesto/' | relative_url }}">Manifesto</a>
+        <a href="{{ '/archives/' | relative_url }}">A r s i p</a>
+        <a href="{{ '/about/' | relative_url }}">Tentang</a>
+      </nav>
+    </header>
+
+    <main class="container" role="main">
+      {{ content }}
+    </main>
+
+    <footer class="site-footer">
+      <img src="{{ '/assets/images/sigil.svg' | relative_url }}" alt="Sigil 133" class="footer-sigil" data-pulse>
+      <div>© {{ site.time | date: "%Y" }} {{ site.title }} — All rights reserved.</div>
+      <div style="margin-top:6px;color:var(--muted);font-size:0.9rem;">Designed for discretion & contemplation.</div>
+    </footer>
+  </body>
+</html>
+"""))
+
+# Minimal post layout to show title
+write("_layouts/post.html", textwrap.dedent("""\
+---
+layout: default
+---
+
+<article class="card">
+  <h2 class="post-title">{{ page.title }}</h2>
+  <div class="post-meta">{{ page.date | date: "%d %B %Y" }}</div>
+  <div class="post-content">{{ content }}</div>
+</article>
+"""))
+
+# Home layout (list recent posts)
+write("_layouts/home.html", textwrap.dedent("""\
+---
+layout: default
+---
+
+<section class="container">
+  <div class="card">
+    <h2 style="margin-top:0">Latest</h2>
+    <ul style="list-style:none;padding-left:0;margin:0">
+      {% for post in site.posts limit:6 %}
+        <li style="padding:12px 0;border-bottom:1px dashed rgba(255,255,255,0.03)">
+          <a href=\"{{ post.url | relative_url }}\" style=\"font-weight:600;color:var(--light)\">{{ post.title }}</a>
+          <div style=\"color:var(--muted);font-size:0.9rem\">{{ post.date | date: \"%d %b %Y\" }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+"""))
+
+# Images placeholders (SVG simple logo & sigil)
+write("assets/images/logo.svg", textwrap.dedent("""\
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280" viewBox="0 0 280 280" role="img" aria-label="133Clan logo">
+  <defs/>
+  <rect width="100%" height="100%" fill="none"/>
+  <g transform="translate(40,30)">
+    <polygon points="100,0 180,86 20,86" fill="#c99a3b" opacity="0.95"/>
+    <circle cx="100" cy="48" r="18" fill="#05060a"/>
+    <path d="M85 40 L115 40 L120 60 L80 60 Z" fill="#071028" />
+    <text x="100" y="120" font-family="Playfair Display, serif" font-size="22" fill="#f6f2e9" text-anchor="middle">133</text>
+  </g>
+</svg>
+"""))
+
+write("assets/images/sigil.svg", textwrap.dedent("""\
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="120" viewBox="0 0 360 120" role="img" aria-label="133 Sigil">
+  <rect width="100%" height="100%" fill="none"/>
+  <g transform="translate(20,10)">
+    <circle cx="40" cy="40" r="36" fill="none" stroke="#c99a3b" stroke-width="3"/>
+    <text x="40" y="46" font-family="Playfair Display, serif" font-size="20" fill="#c99a3b" text-anchor="middle">133</text>
+    <path d="M90 10 L150 10 L120 70 Z" fill="#c99a3b" opacity="0.14"/>
+  </g>
+</svg>
+"""))
+
+# Create ZIP
+zip_path = "/mnt/data/133clan_template_upgraded.zip"
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+    for root, _, files in os.walk(base):
+        for file in files:
+            full = os.path.join(root, file)
+            rel = os.path.relpath(full, base)
+            zipf.write(full, rel)
+
+# Confirm result
+zip_path
